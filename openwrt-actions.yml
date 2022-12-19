@@ -1,0 +1,28 @@
+name: openwrt-actions
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: opensuse-tumbleweed
+    steps:
+    - name: Install CMAKE
+       run: zypper update
+       run: zypper in cmake make gcc -y
+    - name: Add User
+       run: useradd -m -G wheel openwrt
+       run: su openwrt
+    - name: Update Feeds
+       run: ./scripts/feeds update -a
+       run: ./scripts/feeds install -a
+    - name: Create config file
+       run: touch .config
+       run: echo CONFIG_TARGET_x86=y > .config
+       run: echo CONFIG_TARGET_x86_64=y > .config
+       run: echo CONFIG_TARGET_IMAGES_GZIP=y > .config
+    - name:  Make
+       run: make config
+
