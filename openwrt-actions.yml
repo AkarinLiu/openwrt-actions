@@ -24,5 +24,14 @@ jobs:
        run: echo CONFIG_TARGET_x86_64=y > .config
        run: echo CONFIG_TARGET_IMAGES_GZIP=y > .config
     - name:  Make
-       run: make config
+       run: make download -j8
+       run: make defconfig
+       run: make kernelconfig
+       run: make -j 16
+    - name: Clean
+       run: make clean
+       run: make dirclean
+       run: make distclean
+
+
 
